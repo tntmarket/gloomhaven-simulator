@@ -142,6 +142,34 @@ def test_reshuffle_if_out_of_cards():
     assert game.damage == 6
 
 
+def test_average_bonus_damage():
+    game = Game([1, 2, 3])
+    game.attack(1)
+    game.attack(4)
+    game.attack(7)
+
+    assert game.average_bonus() == 2
+
+
+def test_average_bonus_damage_with_crit_and_miss():
+    game = Game(['crit', 0])
+    game.attack(5)
+    game.attack(5)
+
+    game.deck = ['miss', 0]
+    game.attack(5)
+    game.attack(5)
+
+    assert game.average_bonus() == 0
+
+
+def test_average_bonus_damage_with_multiple_targets():
+    game = Game([1])
+    game.attack(1, targets=3)
+
+    assert game.average_bonus() == 1
+
+
 @pytest.fixture
 def mock_shuffle():
     with mock.patch.object(Game, 'shuffle') as shuffle:

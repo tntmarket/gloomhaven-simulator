@@ -11,6 +11,8 @@ class Game:
 
         self.should_reshuffle = False
         self.deck = self.original_deck.copy()
+        self.num_attacks = 0
+        self.total_base_damage = 0
         self.damage = 0
 
     def attack(self, base: int, advantage=False, targets=1):
@@ -21,9 +23,14 @@ class Game:
                 modifier = max(self.draw_card(base), modifier)
 
             self.damage += max(base + modifier, 0)
+            self.total_base_damage += base
+            self.num_attacks += 1
 
         if self.should_reshuffle:
             self.shuffle()
+
+    def average_bonus(self):
+        return (self.damage - self.total_base_damage)/self.num_attacks
 
     def shuffle(self):
         self.deck = self.original_deck.copy()
