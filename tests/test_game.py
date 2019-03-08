@@ -2,7 +2,7 @@ from unittest import mock
 
 import pytest
 
-from simulate_draws import Game
+from game import Game
 
 
 def test_attack():
@@ -98,6 +98,48 @@ def test_advantage_prefers_crit():
     game.attack(2, advantage=True)
 
     assert game.damage == 4
+
+
+def test_advantaged_crit_reshuffles(mock_shuffle):
+    game = Game(['crit', 0])
+    game.attack(2, advantage=True)
+
+    assert mock_shuffle.called
+
+
+def test_advantaged_miss_reshuffles(mock_shuffle):
+    game = Game([0, 'miss'])
+    game.attack(2, advantage=True)
+
+    assert mock_shuffle.called
+
+
+def test_advantage_applies_to_whole_attack_action():
+    game = Game([1, 0, 0, 1])
+    game.attack(2, advantage=True, targets=2)
+
+    assert game.damage == 6
+
+
+def test_do_not_shuffle_until_end_of_action():
+    game = Game([1, 1, 'miss'])
+    game.attack(2, targets=3)
+
+    assert game.damage == 6
+
+
+def test_do_not_shuffle_until_end_of_advantaged_action():
+    game = Game([1, 1, 0, 'miss'])
+    game.attack(2, advantage=True, targets=2)
+
+    assert game.damage == 5
+
+
+def test_reshuffle_if_out_of_cards():
+    game = Game([1])
+    game.attack(2, targets=2)
+
+    assert game.damage == 6
 
 
 @pytest.fixture
