@@ -2,6 +2,30 @@ from deck import create_deck
 from game import Game
 
 
+def simulate_no_advantage_game(distribution):
+    game = Game(create_deck(distribution))
+
+    game.attack(3)
+    game.attack(3, targets=2)
+    game.attack(2)
+    game.attack(2)
+
+    game.attack(3)
+    game.attack(3)
+    game.attack(2)
+
+    game.attack(4, targets=2)
+    game.attack(3)
+
+    game.attack(3)
+
+    game.attack(3)
+    game.attack(3)
+    game.attack(2)
+
+    return game.damage
+
+
 def simulate_less_advantaged_game(distribution):
     game = Game(create_deck(distribution))
 
