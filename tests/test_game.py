@@ -48,6 +48,13 @@ def test_attack_with_crit():
     assert game.damage == 10
 
 
+def test_attack_with_bless():
+    game = Game(['bless'])
+    game.attack(3)
+
+    assert game.average_bonus() == 3
+
+
 def test_attack_with_miss():
     game = Game(['miss'])
     game.attack(3)
@@ -76,6 +83,22 @@ def test_attack_depletes_deck():
     assert len(game.deck) == 2
 
 
+def test_bless_is_removed_after_shuffle():
+    game = Game(['miss', 'bless'])
+    game.attack(3)
+    game.attack(3)
+
+    assert game.deck == ['miss']
+
+
+def test_bless_removal_doesnt_mutate_original_deck():
+    deck = ['bless']
+    game = Game(deck)
+    game.attack(3)
+
+    assert deck == ['bless']
+
+
 def test_reshuffle_restores_drawn_cards():
     game = Game([0, 1, 2])
     game.attack(1)
@@ -98,6 +121,12 @@ def test_advantage_prefers_crit():
     game.attack(2, advantage=True)
 
     assert game.damage == 4
+
+def test_advantage_prefers_bless():
+    game = Game([0, 'bless'])
+    game.attack(3, advantage=True)
+
+    assert game.average_bonus() == 3
 
 
 def test_advantaged_crit_reshuffles(mock_shuffle):

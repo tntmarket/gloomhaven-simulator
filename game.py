@@ -7,7 +7,7 @@ Card = Union[int, 'miss', 'crit']
 class Game:
 
     def __init__(self, deck: List[Card]):
-        self.original_deck = deck
+        self.original_deck = deck.copy()
 
         self.should_reshuffle = False
         self.deck = self.original_deck.copy()
@@ -47,9 +47,13 @@ class Game:
             self.should_reshuffle = True
             return base
 
+        if card == 'bless':
+            self.original_deck.remove('bless')
+            return base
+
         if card == 'miss':
             self.should_reshuffle = True
             return -base
 
         return card
-        
+

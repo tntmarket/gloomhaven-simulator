@@ -5,11 +5,14 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
+pytest-watch = "*"
+setuptools = "*"
 
 [packages]
 matplotlib = "*"
 jupyter = "*"
 scipy = "*"
+setuptools = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
